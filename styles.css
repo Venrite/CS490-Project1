@@ -1,0 +1,33 @@
+body {
+    font-family: Arial, sans-serif;
+    text-align: center;
+}
+
+h1 {
+    color: #333;
+}
+
+#quote {
+    font-size: 18px;
+    color: #666;
+}
+
+#target {
+    font-size: 24px;
+    font-weight: bold;
+    color: #333;
+}
+
+#input {
+    font-size: 20px;
+    padding: 10px;
+}
+
+#timer, #score {
+    font-size: 18px;
+    color: #666;
+}
+
+#score-value {
+    font-weight: bold;
+}
