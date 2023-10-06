@@ -1,4 +1,3 @@
-/* File is gonna contain formatting of every field for the front end */
 body {
     font-family: Arial, sans-serif;
     text-align: center;
@@ -7,7 +6,21 @@ body {
 h1 {
     color: #333;
 }
-
+#player {
+    width: 50px;
+    height: 50px;
+    background-color: #00f; /* Player box color, prolly inject a sprite someday */
+    position: absolute;
+    bottom: 20px; /* Adjust the player's vertical position */
+    left: 50%; /* Start player in the middle of the screen */
+    transform: translateX(-50%);/*and centers the object on itself, so that its actually in the middle*/
+}
+#game-container {
+    width: 100%;
+    height: 100vh;
+    background-color: #f0f0f0; /* Background color for the game */
+    position: relative;
+        }
 #quote {
     font-size: 18px;
     color: #666;
