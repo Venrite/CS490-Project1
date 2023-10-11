@@ -18,7 +18,7 @@ h1{
   justify-content: center;
   align-items: center;
   height: 100vh;
-  flex-direction: column; /* Stack items vertically */
+  flex-direction: column;
 }
 
 .box {
@@ -28,15 +28,15 @@ h1{
   width: 400px;
   border-radius: 5px;
   text-align: center;
-  position: relative; /* Relative positioning for the .box */
+  position: relative; 
 }
 
 .w {
-  width: 20%; /* Adjust the width as needed */
-  position: absolute; /* Absolute positioning for the image */
-  top: 0; /* Place the image at the top of the .box */
+  width: 20%; 
+  position: absolute; 
+  top: 0; 
   left: 80%;
-  transform: translateX(-50%); /* Adjust to horizontally center the image */
+  transform: translateX(-50%); 
 }
 
 .Rules {
@@ -45,7 +45,7 @@ h1{
   margin-top: 10px;
 }
 .header {
-  position: absolute; /* Absolute positioning for the header */
+  position: absolute; 
   top: 0;
   margin-top:70px;
   left: 50%;
@@ -61,20 +61,20 @@ h1{
 }
 
 .falling-text span {
-  display: inline-block; /* Display each character on a separate line */
-  animation: falling 2s linear both; /* Define the falling animation */
-  animation-delay: calc(0.1s * var(--char-index)); /* Delay each character */
+  display: inline-block; 
+  animation: falling 2s linear both; 
+  animation-delay: calc(0.1s * var(--char-index)); 
   font-size: larger;
 }
 .profile {
   display: flex;
   align-items: center;
   padding: 10px;
-  position: absolute; /* Position absolute for top-left corner */
-  top: 0; /* Align to the top of the page */
-  left: 0; /* Align to the left of the page */
-  background-color: rgba(255, 0, 0, 0.1); /* Background color for the profile container */
-  color: white; /* Text color */
+  position: absolute; 
+  top: 0; 
+  left: 0;
+  background-color: rgba(255, 0, 0, 0.1);
+  color: white; 
   width: 100%; 
 }
 
