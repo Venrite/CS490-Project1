@@ -1,87 +1,116 @@
-// Global variables
-let startTime;
-let score = 0;
-let intervalId;//handles position, might need to be come a class object
-let wordPosition;
+   const gameContainer = document.getElementById("game-container");//gray area to play in 
+        const player = document.getElementById("player");//player box rn
+        let score = 0;
+		let time = 0;
+		let lives=3;
+		
+        // Function to fetch random words from an API
+        async function fetchWords(length) {//length can be our difficulty, can add multiple words to it even
+            try {
+                const response = await fetch(`https://random-word-api.herokuapp.com/word?number=1&length=${length}`);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const data = await response.json();
+                return data;
+            } catch (error) {
+                console.error('Error fetching words:', error);
+                return [];
+            }
+        }
+		function createHearts() {//yash's make hearts
+			const heartsContainer = document.getElementById('lives');
+			heartsContainer.innerHTML = ''; // Clear existing hearts
+			for (let i = 0; i < lives; i++) {
+				const heart = document.createElement('div');
+				heart.classList.add('heart');
+				heartsContainer.appendChild(heart);
+			}
+		}
+        // Function to create and animate a word
+        async function createWord() {//asynce to use await 
+            const wordBox = document.createElement("div");//make DOM area
+            wordBox.classList.add("word-box");//give it a wordbox
+			wordBox.style.left = `${Math.random() * 50 + 25}vw`;//give it a position based on viewport width
+            const randomWord = await fetchWords(6);//get word based on 6 length rn
+            wordBox.textContent = randomWord;//prolly put await fetch here
+            gameContainer.appendChild(wordBox);//add a child node to the game container.
 
-// Function to select a random word from the API, make separate functions to change difficulty IE length=7,8,9,10..etc
-async function getRandomWord() {
-  try {
-    const response = await fetch('https://random-word-api.herokuapp.com/word?number=1&length=6');
-    if (!response.ok) {
-      throw new Error('Network response was not ok');
-    }
-    const words = await response.json();
-    return words; // Return the first word from the array
-  } catch (error) {
-    console.error('Error fetching word:', error);
-    return '';
-  }
-}
+            // Adjust animation duration based on word length
+            const animation = wordBox.animate(//set our animation for the words
+                [
+                    { top: "0%" },    // Start from the top
+                    { top: "100%" },  // Move to the bottom
+                ],
+                {
+                    duration: 4000, // Adjust animation speed, can be made faster or slower
+                    easing: "linear",
+                }
+            );
 
-// Function to start the game
-async function startGame() {
-  try {//handles issues
-    const word = await getRandomWord(); // Get a word from a function (can be used to change difficulty later)
-   // console.log('Fetched word:', word); // Log the fetched word to the console, might be needed for multiple words falling
-    const gameContainer = document.getElementById("game-container");//set playing area
-    const player = document.getElementById("player");//make player zone 
-    document.getElementById('target').textContent = word; // Display the word falling down
-    document.getElementById("input").value = ""; //our current input for the one falling box
-    document.getElementById("score-value").textContent = score;//show players score
-    startTime = new Date().getTime();// start our timer
-    updateTimer();//call update timer function
-	
-    // Set a random initial position for the word at the top
-    const windowWidth = window.innerWidth;//grab windows width
-    const initialPosition = Math.random() * (windowWidth - 100); // the 100 makes sure it stays on screen with no side scrolling needed
-    wordPosition = -30; // Starting just above the screen
-    document.getElementById('target').style.left = `${initialPosition}px`;//take the previous drop point and move by pixels, so drop isnt from same spot
-    
-    clearInterval(intervalId); // Clear any existing interval PROBABLY GOING TO BE CHANGED when multiple drop
-    intervalId = setInterval(moveWord, 20); // Start moving the word, handles animation
-  } catch (error) {//incase of failure with the await command, this is redundant but errors slipped through in testing
-    console.error('Error starting the game:', error);
-  }
-}
+            animation.onfinish = () => {//once the animation is done
+                if (!wordBox.classList.contains("killed")) { //if it isnt killed
+                    lives--;
+					// Update the heart graphic
+					const heartsContainer = document.getElementById('lives');
+					const hearts = document.querySelectorAll('.heart');
+					hearts[lives].remove();
+					if (lives<=0){//safer to say lessthan incase any weird bug occurs
+							endGame();
+					}
+                }
+            wordBox.remove();//this makes it so you cant type the word after the life is lost and removes a bug. could prolly use a lock =false /true
+            };
+        }
 
-// Function to move the word downward
-function moveWord() {
-  const wordElement = document.getElementById('target');//grab our one target currently
-  wordPosition += 3; // Adjust the speed by changing this value
+        // Function to end the game
+        function endGame() {
+            alert(`Game Over! Score: ${score}`);
+			location.reload();
+        }
+		function updateScore() {
+			const scoreElement = document.getElementById("scoreValue");
+			scoreElement.textContent = score;
+		}
+		function updateTimer() {//it turns our clock on
+			const currentTime = new Date().getTime();
+			const elapsedTime = (currentTime - startTime) / 1000;
+			document.getElementById("time").textContent = elapsedTime.toFixed(2);
+			requestAnimationFrame(updateTimer);
+			}
 
-  // Set the position of the word
-  wordElement.style.position = 'absolute';//poisition near previous ancestor
-  wordElement.style.top = `${wordPosition}px`;// at the top of the screen 30 px's above screen
+        // Event listener for typing in the text box
+        textbox.addEventListener("input", () => {
+            const typedText = textbox.value.trim().toLowerCase();//convert whats typed to lwoercase
+            const wordBoxes = document.querySelectorAll(".word-box");//grab every wordbox in the game container
+            wordBoxes.forEach((wordBox) => {//a beautiful for loop going through our wordboxes
+                const wordText = wordBox.textContent.trim().toLowerCase();//take the target text and make it lowercase
+                if (typedText === wordText) {
+					startTime = new Date().getTime();//restart our timer for now
+                    wordBox.classList.add("killed");//add a killed modifer to the object
+                    wordBox.style.backgroundColor = "#0f0"; //change color to green when killed
+                    wordBox.style.animation = "shake 0.5s"; //apply the shake animation
+                    setTimeout(() => {
+                        wordBox.remove(); //remove the word box after the animation
+                    }, 500); //wait for the animation to finish
+                    score++;
+                    textbox.value = ""; //clear the text box
+					updateScore();
+                }
+            });
+        });
 
-  // If the word is out of the screen, start a new game and display scores
-  if (wordPosition > window.innerHeight) {
-    clearInterval(intervalId);
-	endGame();
-  }
-}
-function endGame() {
-    alert(`Game Over! Score: ${score}`);
-    location.reload(); // For simplicity, reload the page to restart, however we could just use startgame with a score and timer wipe.
-     }
-// Function to update the timer, 100% not made by me, couldnt figure it out so had chatgpt help with the timer
-function updateTimer() {
-    const currentTime = new Date().getTime();
-    const elapsedTime = (currentTime - startTime) / 1000;
-    document.getElementById("time").textContent = elapsedTime.toFixed(2);
-    requestAnimationFrame(updateTimer);
-}
-// Event listener for input field, monitors what we type to match with the target.
-//overall this feels slow in the game, it lags when matching, might need to optimize somehow
-document.getElementById('input').addEventListener('input', async function () {
-  const inputText = this.value;
-  const targetText = document.getElementById('target').textContent;
-
-  if (inputText === targetText) {
-    score++;
-    startGame(); // Wait for startGame to complete before moving to the next game
-  }
-});
-
-// Start the game when the page loads
-window.onload = startGame;
+        // Game loop to create words periodically
+        async function gameLoop() {
+			if (lives === 3) {
+				createHearts();
+			}
+			startTime = new Date().getTime();//starts timer
+			updateTimer();//literally just turns our clock on
+            setInterval(() => {
+                createWord();
+            }, 1000); //adjust the interval for word creation
+        }
+		
+        gameLoop();//this is here to start the game, can be moved to later as a start button
+      
