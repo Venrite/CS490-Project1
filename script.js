@@ -33,6 +33,9 @@
 	lifeloss.volume = 0.1;
 	const dead = document.getElementById('dead');
 	dead.volume = 0.2;
+	const beats = document.getElementById('beats');
+	beats.volume = 0.1;
+	const startButton = document.getElementById("startButton");
 	
 	//const gamedata={//this holds all our gamedata, need to properly set this up with gamedata.spot instead of spot etc etc
 	let spot=0;
@@ -84,12 +87,14 @@
 	async function createWord(num, length, id) { //asynce to use await, add modifier here to make it so if true, match ID and its a powerup when typed.
 		const wordBox = document.createElement("div"); //make DOM area
 		wordBox.classList.add("word-box"); //give it a wordbox
-		spot=Math.random() * 25 + 25;//get random position 
-		wordBox.style.left = `${spot}vw`; //give it a position based on viewport width, staying mostly central, scales with the screen
-		placeholder=spot;
-		if (Math.abs(spot-placeholder)<=25){//check if last spot is to similar to current spot
-		wordBox.style.left = `${Math.random() * 25 + 25}vw`; //try again, chances are it'll be fine, else skill issue
-		}
+		const screenWidth = window.innerWidth;
+		const spotPercentage = 0 + Math.random() * (50);
+		const spot = (spotPercentage / 100) * screenWidth;
+		wordBox.style.left = `${spot}px`; //give it a position based on viewport width, staying mostly central, scales with the screen
+		//placeholder=spot;
+		//if (Math.abs(spot-placeholder)<=25){//check if last spot is to similar to current spot
+		//wordBox.style.left = `${Math.random() * 25 + 25}vw`; //try again, chances are it'll be fine, else skill issue
+		//}
 		const randomWord = await fetchWords(num, length); //get word based on 6 length rn
 		wordBox.textContent = randomWord; //prolly put await fetch here
 		if (id!=0){ //testing spot for "Power ups"
@@ -173,6 +178,7 @@
 		
 		if (lives === 3) {
 			createHearts();
+
 		}
 		startTime = new Date().getTime(); //starts timer
 		updateTimer(); //literally just turns our clock on
@@ -193,10 +199,11 @@
 			},500);
 			createWord(normnum, normlength,0);//spawn normal word with normal length
 		}, difficulty); 
-		
+		/*
 		setInterval(() => {//spawn double words AKA BOSS for now
 			createWord(bossnum, bosslength,0);
 		}, boss); 
+		*/
 		setInterval(() => {//power up tester
 			Randid=Math.floor(Math.random() * (5 - 1 + 1)) + 1
 			createWord(normnum, normlength,3);
@@ -206,6 +213,15 @@
 		setInterval(() => {
 			updateDifficulty();
 		},10000);//add a character every 10 seconds
+		setInterval(() => {
+			beats.play();
+		},108000);//replays music
 
 	}
-	gameLoop(); //this is here to start the game, can be moved to later as a start button
+	startButton.addEventListener("click", () => {
+   startButton.style.display = "none";
+
+    gameLoop();
+    beats.play();
+});
+
