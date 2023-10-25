@@ -1,12 +1,30 @@
 body {
-  margin: 0;/* fixes scaling issue on my PC */
-  overflow: hidden; /* no scrollbar */
+  background: #000;
+  overflow: hidden; /* Prevent overflow of content */
+}
+.wallpaper {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+ 
+  background: url('paperdot.jpg') center center no-repeat, linear-gradient(to bottom, red, blue);
+  background-size: 100% 200%; /* Double the size to have enough space for the animation */
+ animation: shiftColors 30s linear infinite alternate;
+}
+@keyframes shiftColors {
+  0% {
+    background-position: 0 0;
+  }
+  100% {
+    background-position: 0 100%; /* Move the gradient colors to the top */
+  }
 }
 
 #game-container {
   margin: 0;
   display: flex;/* so that the word boxes can be flexible */
   border: 4px solid blue;
+  background: url('galaxy.jpg');
   border-radius: 10px;
   width: 65%;/* takes 65% of the screens width */
   height: 90%;/* take 90% of the height  */
@@ -36,14 +54,25 @@ body {
 
 .word-box {/* its a red box with bold words */
   position: absolute;
-  background-color: red;
   padding: 10px;
   border-radius: 5px;
   font-weight: bold;
+  color: white;
+  background: url('meteor.png');
+  background-size: contain;
+  background-repeat: no-repeat;
+  font-size: 24px; /* Adjust the font size to your preference */
+  line-height: 90px; /* Adjust the line height for readability */
+  align-items: center;
+  justify-content: center;
 }
 
 .killed {
-  background-color: #0f0 !important; /* Change color to a bright green when killed */
+  background:url('explosion.png');
+   background-size: contain;
+  background-repeat: no-repeat;
+  align-items: center;
+  justify-content: center;
 }
 
 #textbox {/* where the player is typing */
