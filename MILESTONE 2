@@ -2,9 +2,9 @@ Settle on a theme for the game (or make it transition based on date to work with
     		Halloween rocks, i can get multiple themes set up and add a check date function;
     		or we can just pick a singular theme and rock with it. maybe add zombies running down to the "player" and you're shooting them by typing the word.  I'll do anything, the theme helps me make powerups cause i can make thematic powerups/enemies
 
-Reconfigure Script.js to allow clearinterval() functions to coexist with the gameloop() 
-		reconfigure the functions so clear interval can be used to reset the setinterval() time (difficulty) for create word functions, IE make it faster or slower for the powerups/ difficulty spike
-		Gameloop has to be restructered, and it would be beneficial to have a seperate mechanic to generate additional words instead of the current multiple setintervals(createword)
+		Reconfigure Script.js to allow clearinterval() functions to coexist with the gameloop() 
+			reconfigure the functions so clear interval can be used to reset the setinterval() time (difficulty) for create word functions, IE make it faster or slower for the powerups/ difficulty spike
+			Gameloop has to be restructered, and it would be beneficial to have a seperate mechanic to generate additional words instead of the current multiple setintervals(createword)
 
 Add power ups detailed in script.js
 		Literally follow word for word what has been described in the script.js as it is a set of instructions on how to complete the powerups
@@ -13,15 +13,21 @@ Add power ups detailed in script.js
 Add a seamless transition if possible from login to gamescreen (possibly an overlay)
   		Requires moving what Ishita has done to what is essentially an overlay on the main index.html. From what i've search up this method will work but changes will need to be made to handle that. -- zack will check to make sure thats a thing thats possible to remove that transition from login to game
 
-Configure Firebox for our database
-		Firebox uses authentication which will be obtained from the login screen, and we can store our metrics there, foreign subject but with enough research this is possible
+Configure Firebase for our database
+		Firebase uses authentication which will be obtained from the login screen, and we can store our metrics there, foreign subject but with enough research this is possible
 
 Create a leaderboard and statistics panel for users to view and to populate the database later
     		Make box on topright of game window look nice and have it house and pull data from a database for the leaderboard.
     		make a box below that or to the left side houseing metrics (WPM can be obtained by the current score and the time function, pretty sure its just multiple those 2 and divide by 60 since the time is in seconds.)
 
-Word Filter possibly. Just go through the word and try to match case. example, if we check for 'bitc' yes we will find bitch, and super bitch, but i would consider losing bitcoin as an acceptable casuallty, same for other curse words.
-		this is by far the lowest priority.
-
 Allow words to spawn in at an angle and travel in vertical pathings, bounce off walls. 
 		could be interesting probably worthless for how complex it'll be come
+
+p0:
+Settle theme
+3 Power ups in game
+Leaderboard with WPM, metrics
+
+p1:
+Spawn words at different angles
+seamless transition 
